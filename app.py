@@ -34,7 +34,7 @@ VALID_PASSWORD = "1234"
 
 # --- SUPABASE STORAGE AUTO-LINK HELPER ---
 SUPABASE_PROJECT_ID = "zyhlzatotyrasffyqlkr"
-BUCKET_NAME = "pdfs"  # Change to "notes" if you named your Supabase bucket "notes"
+BUCKET_NAME = "notes"  # Change to "notes" if you named your Supabase bucket "notes"
 
 def pdf_url(filename):
     base = f"https://{SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/{BUCKET_NAME}/"

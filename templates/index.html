@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURA Dashboard</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 40px;
+    font-family: Arial, sans-serif;
+    color: white;
+
+    /* Background */
+    background-image: url("{{ url_for('static', filename='dashboard1.png') }}");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Top-right user */
+.top-right {
+    position: fixed;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    z-index: 1000;
+    text-shadow: 0 0 10px black;
+}
+
+.logout {
+    color: red;
+    border: 1px solid rgba(255,0,0,0.5);
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-decoration: none;
+    background: rgba(0,0,0,0.3);
+}
+
+/* Container */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    margin-top: 280px; /* increase/decrease */
+}
+/* Logo */
+.logo {
+    font-size: 32px;
+    font-weight: bold;
+    color: #f47521;
+    font-style: italic;
+    margin-bottom: 50px;
+    text-shadow: 0 0 10px black;
+}
+
+/* 🔥 GRID (ROWS + COLUMNS) */
+.grid {
+    display: grid;
+
+    /* 3 cards per row */
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 30px;
+}
+
+/* Card */
+.card {
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 35px;
+    padding: 60px;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    transition: 0.4s;
+
+    backdrop-filter: blur(2px);
+}
+
+.card:hover {
+    border-color: #f47521;
+    transform: translateY(-8px);
+    box-shadow: 0 0 30px rgba(244, 117, 33, 0.6);
+    background: rgba(0,0,0,0.35);
+}
+
+/* Icon */
+.icon {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+/* Title */
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.card:hover .title {
+    color: #f47521;
+}
+
+/* 📱 Responsive */
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Top Right -->
+<div class="top-right">
+    <span>Welcome, {{ user }}</span>
+    <a href="/logout" class="logout">Logout</a>
+</div>
+
+<div class="container">
+
+    
+
+    <div class="grid">
+
+        <a href="/library" class="card">
+            <div class="icon">📚</div>
+            <div class="title">Library</div>
+        </a>
+
+        <a href="/study-materials" class="card">
+            <div class="icon">📂</div>
+            <div class="title">Materials</div>
+        </a>
+
+        <a href="/quizzes" class="card">
+            <div class="icon">✍️</div>
+            <div class="title">Quiz</div>
+        </a>
+
+        
+    </div>
+
+</div>
+
+</body>
+</html>

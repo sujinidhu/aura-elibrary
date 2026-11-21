@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AURA Result</title>
+
+<style>
+body {
+    /* Fixed Background Logic */
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)), 
+        url("{{ url_for('static', filename='quizr.png') }}");
+    
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: #050505; /* Fallback */
+
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Card - Added transparency and blur for a premium glass look */
+.card {
+    background: rgba(13, 13, 13, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    padding: 40px;
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Header */
+.quiz-title {
+    color: #888;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.score {
+    font-size: 72px;
+    font-weight: bold;
+    color: #f47521;
+    margin: 10px 0;
+}
+
+.total {
+    font-size: 24px;
+    color: #666;
+}
+
+/* Scroll Box */
+.scroll-box {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 30px 0;
+    text-align: left;
+    padding-right: 10px;
+}
+
+/* Custom Scrollbar for better UX */
+.scroll-box::-webkit-scrollbar {
+    width: 6px;
+}
+.scroll-box::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+/* Question Box */
+.q-box {
+    padding: 20px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    background: rgba(255, 255, 255, 0.03); /* Subtle contrast against card */
+}
+
+/* Correct / Wrong states */
+.correct {
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.wrong {
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+/* Labels */
+.label {
+    font-size: 10px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.status-correct {
+    color: #22c55e;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.status-wrong {
+    color: #ef4444;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* Question text */
+.question {
+    font-weight: bold;
+    font-size: 16px;
+    margin: 12px 0;
+}
+
+/* Answers */
+.answer {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.green { color: #22c55e; }
+.red { color: #ef4444; }
+
+/* Button */
+.btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 18px;
+    background: #f47521;
+    color: black;
+    text-decoration: none;
+    border-radius: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #ff8c3a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(244, 117, 33, 0.3);
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="quiz-title">{{ quiz_title }}</div>
+
+    <div class="score">
+        {{ score }}<span class="total">/{{ total }}</span>
+    </div>
+
+    <div class="scroll-box">
+
+        {% for item in details %}
+        <div class="q-box {% if item.is_correct %}correct{% else %}wrong{% endif %}">
+
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="label">Question {{ loop.index }}</span>
+                <span class="{% if item.is_correct %}status-correct{% else %}status-wrong{% endif %}">
+                    {% if item.is_correct %}✓ CORRECT{% else %}✕ INCORRECT{% endif %}
+                </span>
+            </div>
+
+            <div class="question">{{ item.question }}</div>
+
+            <div>
+                <span class="label">Your Answer:</span><br>
+                <span class="answer {% if item.is_correct %}green{% else %}red{% endif %}">
+                    {{ item.user_answer }}
+                </span>
+            </div>
+
+            {% if not item.is_correct %}
+            <div style="margin-top:10px;">
+                <span class="label">Correct Answer:</span><br>
+                <span class="answer green">{{ item.correct_answer }}</span>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+    </div> 
+
+    <a href="/" class="btn">Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

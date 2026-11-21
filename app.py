@@ -33,7 +33,7 @@ VALID_USERNAME = "admin"
 VALID_PASSWORD = "1234"
 
 # --- SUPABASE STORAGE AUTO-LINK HELPER ---
-SUPABASE_PROJECT_ID = "zyhlzatotyrasffyqlkr"
+SUPABASE_PROJECT_ID = "zyhlzatoiyrasffyqlki"
 BUCKET_NAME = "notes"  # Change to "notes" if you named your Supabase bucket "notes"
 
 def pdf_url(filename):

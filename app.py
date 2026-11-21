@@ -73,7 +73,7 @@ STUDY_MATERIALS = [
     {"title": "Database Management Systems", "type": "PDF", "link": pdf_url("DBMS.pdf")},
     {"title": "Computer Communication and Networks", "type": "PDF", "link": pdf_url("Computer Communication Networks.pdf")},
     {"title": "Computer Multimedia and Animation", "type": "PDF", "link": pdf_url("Computer Multimedia & Animation (1).pdf")},
-    {"title": "Python Programming", "type": "PDF", "link": pdf_url("PYTHON~~Solved QB(FULL).pdf")},
+    {"title": "Python Programming", "type": "PDF", "link": pdf_url("Python.pdf")},
     {"title": "Operating System Concepts", "type": "PDF", "link": pdf_url("Operating System Concepts.pdf")},
     {"title": "Statistical Computing and R Programming", "type": "PDF", "link": pdf_url("Statistical Computing and R Programming.pdf")},
     {"title": "Design and Analysis of Algorithms", "type": "PDF", "link": pdf_url("ADA study materials.pdf")},

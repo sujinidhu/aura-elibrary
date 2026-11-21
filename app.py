@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from urllib.parse import quote
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 
@@ -31,47 +32,55 @@ with app.app_context():
 VALID_USERNAME = "admin"
 VALID_PASSWORD = "1234"
 
+# --- SUPABASE STORAGE AUTO-LINK HELPER ---
+SUPABASE_PROJECT_ID = "zyhlzatotyrasffyqlkr"
+BUCKET_NAME = "pdfs"  # Change to "notes" if you named your Supabase bucket "notes"
+
+def pdf_url(filename):
+    base = f"https://{SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/{BUCKET_NAME}/"
+    return base + quote(filename)
+
 # --- 2. DATASETS ---
 LIBRARY_BOOKS = [
-    {"id": 1, "title": "Programming in ANSI C", "category": "AUTHOR:BALAGURU SWAMY", "image": "static/WhatsApp Image 2026-04-25 at 3.07.20 PM.jpeg", "link": "static/Programming in ANSI C (E Balagurusamy) (Z-Library).pdf"},
-    {"id": 2, "title": "Fundamentals of Computers", "category": "BCA Core", "image": "static/61vhaWXjshL._SY425_ (1).jpg", "link": "static/Anita-Goel-Computer-Fundamentals-Pearson-2010.pdf"},
-    {"id": 3, "title": "Mathematical Foundation", "category": "BCA Core", "image": "static/images (1).jpg", "link": "static/kunen7701.pdf"},
-    {"id": 4, "title": "Data Structure using C", "category": "BCA Core", "image": "static/515p4XIZoQL._AC_UF1000,1000_QL80_ (1).jpg", "link": "static/data-structures-and-algorithms-with-c-9781783323685_compress.pdf"},
-    {"id": 5, "title": "Object Oriented Programming with JAVA", "category": "BCA core", "image": "static/Screenshot_2026-04-24-20-35-19-53_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": "static/Herbert Schildt - Java_ The Complete Reference-McGraw-Hill Osborne Media (2006).pdf"},
-    {"id": 6, "title": "Discrete Mathematical Structures", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-34-48-68_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": "static/Discrete Mathematics.pdf"},
-    {"id": 7, "title": "C# and .NET Framework", "category": "BCA Core", "image": "static/Screenshot 2026-04-24 205438.png", "link": "static/6_2017_05_21!12_07_57_AM.pdf"},
-    {"id": 8, "title": "Database Management Systems", "category": "BCA Core", "image": "static/Screenshot 2026-04-24 204412.png", "link": "static/Database Management System.pdf"},
-    {"id": 9, "title": "Computer Communication and Networks", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-30-48-97_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": "static/9780133814743.pdf"},
-    {"id": 10, "title": "Computer Multimedia and Animation", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-37-30-07_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": "static/Computer Multimedia Animation.pdf"},
-    {"id": 11, "title": "Python Programming", "category": "BCA Core", "image": "static/Screenshot 2026-04-24 204528.png", "link": "static/Introduction_to_Python_Programming_-_WEB.pdf"},
-    {"id": 12, "title": "Operating System Concepts", "category": "BCA Core", "image": "static/Screenshot 2026-04-24 204607.png", "link": "static/Abraham Silberschatz-Operating System Concepts (9th,2012_12).pdf"},
-    {"id": 13, "title": "Statistical Computing and R Programming", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-30-08-54_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": "static/[4] [Maria L. Rizzo][2019] Statistical Computing  with R, Second Edition.pdf"},
-    {"id": 14, "title": "Design and Analysis of Algorithms", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-35-56-45_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": "static/Design and Analysis of Algorithms.pdf"},
-    {"id": 15, "title": "Software Engineering", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-36-58-77_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": "static/Software Engineering.pdf"},
-    {"id": 16, "title": "Hypertext preprocessor", "category": "php", "image": "static/Screenshot_2026-04-24-20-31-17-25_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": "static/9780321833891.pdf"},
-    {"id": 17, "title": "Web Content Management System", "category": "WCMS", "image": "static/download (1).jpg", "link": "static/WCMS.pdf"},
-    {"id": 18, "title": "J2EE", "category": "BCA Core", "image": "static/download (1) (1).jpg", "link": "static/j2ee-1_3-doc-tutorial-draft5.pdf"}
+    {"id": 1, "title": "Programming in ANSI C", "category": "AUTHOR:BALAGURU SWAMY", "image": "static/WhatsApp Image 2026-04-25 at 3.07.20 PM.jpeg", "link": pdf_url("Programming in ANSI C (E Balagurusamy) (Z-Library).pdf")},
+    {"id": 2, "title": "Fundamentals of Computers", "category": "BCA Core", "image": "static/61vhaWXjshL._SY425_ (1).jpg", "link": pdf_url("Anita-Goel-Computer-Fundamentals-Pearson-2010.pdf")},
+    {"id": 3, "title": "Mathematical Foundation", "category": "BCA Core", "image": "static/images (1).jpg", "link": pdf_url("kunen7701.pdf")},
+    {"id": 4, "title": "Data Structure using C", "category": "BCA Core", "image": "static/515p4XIZoQL._AC_UF1000,1000_QL80_ (1).jpg", "link": pdf_url("data-structures-and-algorithms-with-c-9781783323685_compress.pdf")},
+    {"id": 5, "title": "Object Oriented Programming with JAVA", "category": "BCA core", "image": "static/Screenshot_2026-04-24-20-35-19-53_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": pdf_url("Herbert Schildt - Java_ The Complete Reference-McGraw-Hill Osborne Media (2006).pdf")},
+    {"id": 6, "title": "Discrete Mathematical Structures", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-34-48-68_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": pdf_url("Discrete Mathematics.pdf")},
+    {"id": 7, "title": "C# and .NET Framework", "category": "BCA Core", "image": "static/Screenshot 2026-04-24 205438.png", "link": pdf_url("6_2017_05_21!12_07_57_AM.pdf")},
+    {"id": 8, "title": "Database Management Systems", "category": "BCA Core", "image": "static/Screenshot 2026-04-24 204412.png", "link": pdf_url("Database Management System.pdf")},
+    {"id": 9, "title": "Computer Communication and Networks", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-30-48-97_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": pdf_url("9780133814743.pdf")},
+    {"id": 10, "title": "Computer Multimedia and Animation", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-37-30-07_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": pdf_url("Computer Multimedia Animation.pdf")},
+    {"id": 11, "title": "Python Programming", "category": "BCA Core", "image": "static/Screenshot 2026-04-24 204528.png", "link": pdf_url("Introduction_to_Python_Programming_-_WEB.pdf")},
+    {"id": 12, "title": "Operating System Concepts", "category": "BCA Core", "image": "static/Screenshot 2026-04-24 204607.png", "link": pdf_url("Abraham Silberschatz-Operating System Concepts (9th,2012_12).pdf")},
+    {"id": 13, "title": "Statistical Computing and R Programming", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-30-08-54_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": pdf_url("[4] [Maria L. Rizzo][2019] Statistical Computing  with R, Second Edition.pdf")},
+    {"id": 14, "title": "Design and Analysis of Algorithms", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-35-56-45_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": pdf_url("Design and Analysis of Algorithms.pdf")},
+    {"id": 15, "title": "Software Engineering", "category": "BCA Core", "image": "static/Screenshot_2026-04-24-20-36-58-77_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": pdf_url("Software Engineering.pdf")},
+    {"id": 16, "title": "Hypertext preprocessor", "category": "php", "image": "static/Screenshot_2026-04-24-20-31-17-25_e5d3893ac03954c6bb675ef2555b879b.jpg", "link": pdf_url("9780321833891.pdf")},
+    {"id": 17, "title": "Web Content Management System", "category": "WCMS", "image": "static/download (1).jpg", "link": pdf_url("WCMS.pdf")},
+    {"id": 18, "title": "J2EE", "category": "BCA Core", "image": "static/download (1) (1).jpg", "link": pdf_url("j2ee-1_3-doc-tutorial-draft5.pdf")}
 ]
 
 STUDY_MATERIALS = [
-    {"title": "Programming in ANSI C", "type": "PDF", "link": "static/BSCIT 102 C Lang.pdf"},
-    {"title": "Fundamentals of Computers", "type": "PDF", "link": "static/computer_fundamental.pdf"},
-    {"title": "Mathematical Foundation", "type": "PDF", "link": "static/Lecture-notes.pdf"},
-    {"title": "Data Structure using C", "type": "PDF", "link": "static/Data Structures using C.pdf"},
-    {"title": "Object Oriented Programming with JAVA", "type": "PDF", "link": "static/Java.pdf"},
-    {"title": "Discrete Mathematical Structures", "type": "PDF", "link": "static/DISCRETE MATHEMATICS NOTES.pdf"},
-    {"title": "C# and .NET Framework", "type": "PDF", "link": "static/dotNET.pdf"},
-    {"title": "Database Management Systems", "type": "PDF", "link": "static/DBMS.pdf"},
-    {"title": "Computer Communication and Networks", "type": "PDF", "link": "static/Computer Communication Networks.pdf"},
-    {"title": "Computer Multimedia and Animation", "type": "PDF", "link": "static/Computer Multimedia & Animation (1).pdf"},
-    {"title": "Python Programming", "type": "PDF", "link": "static/PYTHON~~Solved QB(FULL).pdf"},
-    {"title": "Operating System Concepts", "type": "PDF", "link": "static/Operating System Concepts.pdf"},
-    {"title": "Statistical Computing and R Programming", "type": "PDF", "link": "static/Statistical Computing and R Programming.pdf"},
-    {"title": "Design and Analysis of Algorithms", "type": "PDF", "link": "static/ADA study materials.pdf"},
-    {"title": "Software Engineering", "type": "PDF", "link": "static/software engineering study.pdf"},
-    {"title": "Hypertext preprocessor", "type": "PDF", "link": "static/PHP.pdf"},
-    {"title": "Web Content Management System", "type": "PDF", "link": "static/WCMS STUDY MATERLAS OF BCA AND BCOM-CA.pdf"},
-    {"title": "J2EE", "type": "PDF", "link": "static/VI SEM BCA-Advanced JAVA and J2EE(MVC)-STUDY MATERILAS (1).pdf"}
+    {"title": "Programming in ANSI C", "type": "PDF", "link": pdf_url("BSCIT 102 C Lang.pdf")},
+    {"title": "Fundamentals of Computers", "type": "PDF", "link": pdf_url("computer_fundamental.pdf")},
+    {"title": "Mathematical Foundation", "type": "PDF", "link": pdf_url("Lecture-notes.pdf")},
+    {"title": "Data Structure using C", "type": "PDF", "link": pdf_url("Data Structures using C.pdf")},
+    {"title": "Object Oriented Programming with JAVA", "type": "PDF", "link": pdf_url("Java.pdf")},
+    {"title": "Discrete Mathematical Structures", "type": "PDF", "link": pdf_url("DISCRETE MATHEMATICS NOTES.pdf")},
+    {"title": "C# and .NET Framework", "type": "PDF", "link": pdf_url("dotNET.pdf")},
+    {"title": "Database Management Systems", "type": "PDF", "link": pdf_url("DBMS.pdf")},
+    {"title": "Computer Communication and Networks", "type": "PDF", "link": pdf_url("Computer Communication Networks.pdf")},
+    {"title": "Computer Multimedia and Animation", "type": "PDF", "link": pdf_url("Computer Multimedia & Animation (1).pdf")},
+    {"title": "Python Programming", "type": "PDF", "link": pdf_url("PYTHON~~Solved QB(FULL).pdf")},
+    {"title": "Operating System Concepts", "type": "PDF", "link": pdf_url("Operating System Concepts.pdf")},
+    {"title": "Statistical Computing and R Programming", "type": "PDF", "link": pdf_url("Statistical Computing and R Programming.pdf")},
+    {"title": "Design and Analysis of Algorithms", "type": "PDF", "link": pdf_url("ADA study materials.pdf")},
+    {"title": "Software Engineering", "type": "PDF", "link": pdf_url("software engineering study.pdf")},
+    {"title": "Hypertext preprocessor", "type": "PDF", "link": pdf_url("PHP.pdf")},
+    {"title": "Web Content Management System", "type": "PDF", "link": pdf_url("WCMS STUDY MATERLAS OF BCA AND BCOM-CA.pdf")},
+    {"title": "J2EE", "type": "PDF", "link": pdf_url("VI SEM BCA-Advanced JAVA and J2EE(MVC)-STUDY MATERILAS (1).pdf")}
 ]
 
 QUIZ_DATA = {
